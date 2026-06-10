@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ServiceBill — Your calendar bills your clients</title>
+<meta name="description" content="Invoicing for service businesses. Calendar-driven, QuickBooks-native. Lawn care, cleaning, pool service, pest control, pet care, trainers. Stop spending Sundays making invoices." />
+<meta property="og:title" content="ServiceBill — Your calendar bills your clients" />
+<meta property="og:description" content="Invoicing for service businesses that show up, do the work, and want to get paid without spending Sunday night making invoices." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://servicebill.ai" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232CA01C'/%3E%3Ctext x='16' y='22' font-family='-apple-system,BlinkMacSystemFont,system-ui,sans-serif' font-size='17' font-weight='600' fill='white' text-anchor='middle'%3Eb%3C/text%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://rsms.me/" />
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.30.0/dist/tabler-icons.min.css" />
+
+<style>
+  :root {
+    --green: #2CA01C;
+    --green-dark: #166534;
+    --green-soft: #DCFCE7;
+    --green-soft-2: #F0FDF4;
+    --green-border: #86EFAC;
+    --ink: #0F172A;
+    --ink-2: #334155;
+    --muted: #64748B;
+    --muted-2: #94A3B8;
+    --hairline: #E2E8F0;
+    --hairline-2: #F1F5F9;
+    --bg: #FFFFFF;
+    --bg-2: #F8FAFC;
+    --amber: #B45309;
+    --amber-soft: #FEF3C7;
+    --amber-text: #78350F;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    --container: 1120px;
+    --container-narrow: 880px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    color: var(--ink);
+    background: var(--bg);
+    margin: 0;
+    padding: 0;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+  }
+
+  .container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+  .container-narrow { max-width: var(--container-narrow); margin: 0 auto; padding: 0 24px; }
+
+  /* nav */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px; max-width: var(--container); margin: 0 auto;
+  }
+  .logo { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
+  .logo-mark {
+    width: 30px; height: 30px; border-radius: 7px; background: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 14px; letter-spacing: -0.5px;
+  }
+  .logo-text { font-weight: 600; font-size: 17px; letter-spacing: -0.3px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-links a {
+    color: var(--ink-2); text-decoration: none; font-size: 14px; font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--green); }
+  .nav-cta { display: flex; gap: 8px; align-items: center; }
+  @media (max-width: 760px) { .nav-links { display: none; } }
+
+  /* buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 18px; border-radius: var(--radius); font-size: 14px; font-weight: 500;
+    text-decoration: none; cursor: pointer; transition: all 0.15s; border: 1px solid transparent;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--green); color: white;
+  }
+  .btn-primary:hover { background: #259018; transform: translateY(-1px); box-shadow: var(--shadow); }
+  .btn-secondary {
+    background: white; color: var(--ink); border: 1px solid var(--hairline);
+  }
+  .btn-secondary:hover { border-color: var(--ink-2); }
+  .btn-lg { padding: 13px 24px; font-size: 15px; }
+  .btn-white {
+    background: white; color: var(--green-dark); font-weight: 600;
+  }
+  .btn-white:hover { transform: translateY(-1px); }
+
+  /* hero */
+  .hero { padding: 80px 0 56px; text-align: center; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 14px; background: var(--green-soft); color: var(--green-dark);
+    border-radius: 999px; font-size: 13px; font-weight: 500; margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 64px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.02;
+    margin: 0 0 22px;
+    max-width: 760px;
+    margin-left: auto; margin-right: auto;
+    color: var(--ink);
+  }
+  .hero h1 .accent { color: var(--green); }
+  .hero p.lead {
+    font-size: clamp(17px, 2vw, 19px); color: var(--ink-2);
+    line-height: 1.5; max-width: 560px; margin: 0 auto 36px;
+  }
+  .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero-note { font-size: 13px; color: var(--muted); margin-top: 18px; }
+
+  /* flow diagram */
+  .flow-section { padding: 32px 0 88px; }
+  .flow {
+    background: var(--bg-2); border-radius: var(--radius-xl); padding: 28px;
+    max-width: 920px; margin: 0 auto;
+    border: 1px solid var(--hairline);
+  }
+  .flow-grid {
+    display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr;
+    gap: 0; align-items: stretch;
+  }
+  .flow-card {
+    background: white; border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg); padding: 18px;
+  }
+  .flow-card.success { border-color: var(--green-border); }
+  .flow-eyebrow {
+    font-size: 11px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.6px; margin-bottom: 10px; font-weight: 600;
+  }
+  .flow-card.success .flow-eyebrow { color: var(--green-dark); }
+  .flow-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .flow-sub { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .flow-status { font-size: 12px; display: flex; align-items: center; gap: 5px; font-weight: 500; }
+  .flow-status.done { color: var(--green-dark); }
+  .flow-status.pending { color: #1E40AF; }
+  .flow-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted-2);
+  }
+  .flow-arrow i { font-size: 22px; }
+  .flow-caption {
+    text-align: center; font-size: 13px; color: var(--muted);
+    margin: 22px 0 0;
+  }
+  @media (max-width: 760px) {
+    .flow-grid { grid-template-columns: 1fr; gap: 14px; }
+    .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+  }
+
+  /* sections */
+  section { padding: 88px 0; }
+  .eyebrow {
+    font-size: 12px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.6px; text-align: center; margin: 0 0 18px; font-weight: 600;
+  }
+  h2.section-title {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700; letter-spacing: -1.2px; line-height: 1.1;
+    text-align: center; margin: 0 0 14px;
+  }
+  p.section-lead {
+    font-size: 17px; color: var(--ink-2); text-align: center;
+    max-width: 520px; margin: 0 auto 56px; line-height: 1.5;
+  }
+
+  /* industry tiles */
+  .industries {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;
+    max-width: 720px; margin: 0 auto;
+  }
+  .industry {
+    background: var(--bg-2); border-radius: var(--radius); padding: 22px 12px;
+    text-align: center; transition: all 0.15s; cursor: default;
+    border: 1px solid transparent;
+  }
+  .industry:hover { background: var(--green-soft-2); border-color: var(--green-border); }
+  .industry i { font-size: 26px; color: var(--ink-2); display: block; margin-bottom: 8px; }
+  .industry:hover i { color: var(--green); }
+  .industry span { font-size: 13px; font-weight: 500; color: var(--ink-2); }
+  @media (max-width: 760px) {
+    .industries { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* 3 steps */
+  .steps {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+  }
+  .step {
+    background: white; border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg); padding: 28px;
+    transition: all 0.2s;
+  }
+  .step:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); border-color: var(--green-border); }
+  .step-num {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--bg-2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 600; margin-bottom: 18px; color: var(--ink);
+  }
+  .step h3 { font-size: 19px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.3px; }
+  .step p { font-size: 14px; color: var(--ink-2); margin: 0; line-height: 1.6; }
+  @media (max-width: 760px) {
+    .steps { grid-template-columns: 1fr; }
+  }
+
+  /* qbo section */
+  .qbo-block {
+    background: var(--green-soft-2);
+    border-radius: var(--radius-xl);
+    padding: 44px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    border: 1px solid var(--green-border);
+  }
+  .qbo-eyebrow {
+    font-size: 12px; color: var(--green-dark); text-transform: uppercase;
+    letter-spacing: 0.6px; font-weight: 600; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .qbo-block h3 {
+    font-size: 26px; font-weight: 700; letter-spacing: -0.7px;
+    margin: 0 0 14px; color: var(--green-dark); line-height: 1.2;
+  }
+  .qbo-block p { font-size: 15px; color: var(--green-dark); margin: 0 0 18px; line-height: 1.6; }
+  .qbo-link { color: var(--green-dark); font-weight: 600; font-size: 14px; text-decoration: none; }
+  .qbo-link:hover { text-decoration: underline; }
+  .qbo-sample {
+    background: white; border-radius: var(--radius-lg);
+    padding: 20px; border: 1px solid var(--green-border);
+  }
+  .qbo-sample-eyebrow { font-size: 12px; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
+  .qbo-row {
+    display: flex; justify-content: space-between;
+    padding: 9px 0; font-size: 14px;
+    border-top: 1px solid var(--hairline-2);
+  }
+  .qbo-row:first-of-type { border-top: none; }
+  .qbo-row .acct { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .qbo-row .amt { font-weight: 500; }
+  .qbo-synced {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0 0; border-top: 1px solid var(--hairline);
+    margin-top: 8px; font-size: 14px; font-weight: 600;
+  }
+  .qbo-synced i { font-size: 18px; color: var(--green); }
+  @media (max-width: 760px) {
+    .qbo-block { grid-template-columns: 1fr; padding: 28px; gap: 28px; }
+  }
+
+  /* features grid */
+  .features {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .feature {
+    background: white; border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg); padding: 22px;
+  }
+  .feature i {
+    font-size: 22px; color: var(--green); margin-bottom: 12px; display: block;
+  }
+  .feature h3 {
+    font-size: 15px; font-weight: 600; margin: 0 0 6px;
+  }
+  .feature p { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.55; }
+  @media (max-width: 760px) {
+    .features { grid-template-columns: 1fr; }
+  }
+
+  /* testimonial */
+  .testimonial-section { background: var(--bg-2); }
+  .testimonial {
+    max-width: 720px; margin: 0 auto;
+    text-align: center;
+  }
+  .testimonial blockquote {
+    font-family: 'Inter', serif;
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 400; letter-spacing: -0.6px; line-height: 1.35;
+    color: var(--ink); margin: 0 0 28px; quotes: """ """;
+  }
+  .testimonial blockquote::before { content: open-quote; }
+  .testimonial blockquote::after { content: close-quote; }
+  .testimonial-attr {
+    display: flex; align-items: center; gap: 14px; justify-content: center;
+  }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--green-soft); color: var(--green-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 14px;
+  }
+  .testimonial-name { font-size: 15px; font-weight: 600; text-align: left; }
+  .testimonial-role { font-size: 13px; color: var(--muted); text-align: left; }
+
+  /* comparison */
+  .compare {
+    max-width: 920px; margin: 0 auto;
+    background: white; border: 1px solid var(--hairline);
+    border-radius: var(--radius-xl); padding: 36px; overflow-x: auto;
+  }
+  .compare h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 24px; }
+  .compare table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 600px; }
+  .compare th {
+    text-align: left; padding: 14px 12px; font-weight: 600;
+    color: var(--muted); font-size: 13px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .compare th.us { color: var(--green); }
+  .compare td {
+    padding: 14px 12px; border-bottom: 1px solid var(--hairline-2);
+    color: var(--ink-2);
+  }
+  .compare tr:last-child td { border-bottom: none; }
+  .compare td.label { color: var(--muted); width: 38%; }
+  .compare td.highlight { color: var(--green); font-weight: 600; }
+  .compare i.ti-check { color: var(--green); font-size: 20px; }
+  .compare i.ti-x { color: var(--muted-2); font-size: 20px; }
+  .compare i.ti-minus { color: var(--muted-2); font-size: 20px; }
+
+  /* pricing */
+  .pricing {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    max-width: 880px; margin: 0 auto;
+  }
+  .price-card {
+    background: white; border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg); padding: 28px;
+    position: relative; transition: all 0.2s;
+  }
+  .price-card:hover { box-shadow: var(--shadow-lg); }
+  .price-card.featured { border: 2px solid var(--green); padding: 27px; }
+  .price-badge {
+    position: absolute; top: -11px; left: 28px;
+    background: var(--green); color: white; font-size: 11px;
+    padding: 4px 11px; border-radius: 999px; font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  .price-tier { font-size: 14px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+  .price-amt {
+    font-size: 38px; font-weight: 700; margin: 0; letter-spacing: -1.5px;
+  }
+  .price-amt span { font-size: 15px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+  .price-desc { font-size: 13px; color: var(--muted); margin: 4px 0 18px; }
+  .price-features { font-size: 13px; color: var(--ink-2); line-height: 1.9; margin-bottom: 20px; }
+  .price-features div { display: flex; align-items: flex-start; gap: 8px; }
+  .price-features i { color: var(--green); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .price-cta { width: 100%; }
+  .pricing-note { text-align: center; font-size: 13px; color: var(--muted); margin-top: 20px; }
+  @media (max-width: 760px) {
+    .pricing { grid-template-columns: 1fr; }
+  }
+
+  /* bookkeeper */
+  .bookkeeper {
+    background: var(--bg-2); border-radius: var(--radius-xl);
+    padding: 36px;
+    display: grid; grid-template-columns: 80px 1fr auto;
+    gap: 24px; align-items: center;
+    border: 1px solid var(--hairline);
+  }
+  .bookkeeper-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: white; display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--hairline);
+  }
+  .bookkeeper-icon i { font-size: 32px; color: var(--ink-2); }
+  .bookkeeper h3 { font-size: 20px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.4px; }
+  .bookkeeper p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.55; }
+  @media (max-width: 760px) {
+    .bookkeeper { grid-template-columns: 1fr; text-align: center; }
+    .bookkeeper-icon { margin: 0 auto; }
+  }
+
+  /* final cta */
+  .final-cta {
+    background: var(--green);
+    border-radius: var(--radius-xl);
+    padding: 64px 32px;
+    text-align: center; color: white;
+  }
+  .final-cta h2 {
+    font-size: clamp(28px, 4vw, 38px); font-weight: 700; letter-spacing: -1px;
+    margin: 0 0 12px; color: white; line-height: 1.15;
+  }
+  .final-cta p { font-size: 16px; opacity: 0.92; margin: 0 0 28px; }
+
+  /* footer */
+  footer { padding: 56px 0 32px; border-top: 1px solid var(--hairline); margin-top: 88px; }
+  .footer-links {
+    display: flex; justify-content: center; gap: 28px;
+    margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--ink-2); text-decoration: none; font-size: 14px;
+  }
+  .footer-links a:hover { color: var(--green); }
+  .footer-tag { text-align: center; font-size: 13px; color: var(--muted); }
+
+  @media (max-width: 760px) {
+    section { padding: 64px 0; }
+    .hero { padding: 56px 0 32px; }
+    .qbo-block, .bookkeeper, .compare { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">sb</div>
+      <div class="logo-text">servicebill<span style="color:var(--green);">.ai</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#industries">For your industry</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#bookkeepers">Bookkeepers</a>
+    </div>
+    <div class="nav-cta">
+      
+      <a href="mailto:hello@servicebill.ai?subject=ServiceBill%20early%20access&body=Company%20name%2C%20industry%2C%20and%20how%20many%20crews%3A" class="btn btn-primary">Get early access</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="badge">
+      <i class="ti ti-link" aria-hidden="true"></i>
+      Works with QuickBooks Online
+    </div>
+    <h1>Your calendar<br/><span class="accent">bills your clients.</span></h1>
+    <p class="lead">For service businesses that show up, do the work, and want to get paid without spending Sunday night making invoices.</p>
+    <div class="hero-cta">
+      <a href="#pricing" class="btn btn-primary btn-lg">Start free for 14 days</a>
+      <a href="#how" class="btn btn-secondary btn-lg">
+        <i class="ti ti-player-play" aria-hidden="true"></i>
+        Watch 90-sec demo
+      </a>
+    </div>
+    <p class="hero-note">No credit card · Connects to QuickBooks in 2 minutes</p>
+  </div>
+</header>
+
+<section class="flow-section" style="padding-top: 0;">
+  <div class="container">
+    <div class="flow">
+      <div class="flow-grid">
+        <div class="flow-card">
+          <div class="flow-eyebrow">Tuesday</div>
+          <div class="flow-title">Anderson estate</div>
+          <div class="flow-sub">2:30pm · Weekly mow</div>
+          <div class="flow-status done">
+            <i class="ti ti-circle-check" aria-hidden="true"></i>
+            Crew added 4 bales of pine straw
+          </div>
+        </div>
+        <div class="flow-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        <div class="flow-card">
+          <div class="flow-eyebrow">Auto-drafted</div>
+          <div class="flow-title">Invoice #1042</div>
+          <div class="flow-sub">3 line items · $190.13</div>
+          <div class="flow-status pending">
+            <i class="ti ti-eye" aria-hidden="true"></i>
+            Waiting for your approval
+          </div>
+        </div>
+        <div class="flow-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        <div class="flow-card success">
+          <div class="flow-eyebrow">Wednesday</div>
+          <div class="flow-title">$190.13 paid</div>
+          <div class="flow-sub">Anderson · Apple Pay</div>
+          <div class="flow-status done">
+            <i class="ti ti-check" aria-hidden="true"></i>
+            Synced to QuickBooks
+          </div>
+        </div>
+      </div>
+      <p class="flow-caption">From job to bank account, with one approval tap from you.</p>
+    </div>
+  </div>
+</section>
+
+<section id="industries" style="padding-top: 32px;">
+  <div class="container">
+    <p class="eyebrow">Built for businesses that bill by the visit</p>
+    <div class="industries">
+      <div class="industry">
+        <i class="ti ti-mower" aria-hidden="true"></i>
+        <span>Lawn care</span>
+      </div>
+      <div class="industry">
+        <i class="ti ti-spray" aria-hidden="true"></i>
+        <span>Cleaning</span>
+      </div>
+      <div class="industry">
+        <i class="ti ti-paw" aria-hidden="true"></i>
+        <span>Pet services</span>
+      </div>
+      <div class="industry">
+        <i class="ti ti-pool" aria-hidden="true"></i>
+        <span>Pool service</span>
+      </div>
+      <div class="industry">
+        <i class="ti ti-bug" aria-hidden="true"></i>
+        <span>Pest control</span>
+      </div>
+      <div class="industry">
+        <i class="ti ti-barbell" aria-hidden="true"></i>
+        <span>Trainers</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="container">
+    <h2 class="section-title">Three steps. That's the whole product.</h2>
+    <p class="section-lead">No new system to learn. No data to migrate. ServiceBill sits between your calendar and your books.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>The crew shows up.</h3>
+        <p>Each calendar event is a job. The crew taps "complete" on their phone — voice-notes anything extra they did. That's it for the field.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Buq drafts the invoice.</h3>
+        <p>Base service auto-fills from the recurring schedule. Extras turn into QuickBooks line items with the right pricing — pulled from your own item list.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>You tap approve.</h3>
+        <p>Review the queue from your couch. Approve all, or edit individuals. Invoices send with payment links. Cash settles into QuickBooks automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top: 0;">
+  <div class="container">
+    <div class="qbo-block">
+      <div>
+        <div class="qbo-eyebrow">
+          <i class="ti ti-link" aria-hidden="true"></i>
+          QuickBooks Online
+        </div>
+        <h3>Your books, exactly as your accountant wants them.</h3>
+        <p>Every line item maps to your real QBO items, with the right income accounts and tax codes. No duplicate data. No Monday cleanup. Your bookkeeper will love it.</p>
+        <a href="#how" class="qbo-link">See how it works →</a>
+      </div>
+      <div class="qbo-sample">
+        <div class="qbo-sample-eyebrow">Anderson estate · Invoice #1042</div>
+        <div class="qbo-row">
+          <div>
+            Weekly mow
+            <div class="acct">→ Landscaping income</div>
+          </div>
+          <span class="amt">$120.00</span>
+        </div>
+        <div class="qbo-row">
+          <div>
+            Pine straw · 4 bales
+            <div class="acct">→ Materials (taxable)</div>
+          </div>
+          <span class="amt">$34.00</span>
+        </div>
+        <div class="qbo-row">
+          <div>
+            Leaf cleanup · 0.75 hr
+            <div class="acct">→ Service income</div>
+          </div>
+          <span class="amt">$33.75</span>
+        </div>
+        <div class="qbo-synced">
+          <span>Synced to QuickBooks</span>
+          <i class="ti ti-circle-check-filled" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Everything that actually matters.</h2>
+    <p class="section-lead">No bloat. No 200-feature checklist. Just the parts that move money.</p>
+    <div class="features">
+      <div class="feature">
+        <i class="ti ti-calendar-time" aria-hidden="true"></i>
+        <h3>Recurring schedules</h3>
+        <p>Weekly, bi-weekly, monthly — set it once, ServiceBill invoices every time.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-device-mobile" aria-hidden="true"></i>
+        <h3>Crew mobile app</h3>
+        <p>Route view, photo capture, voice notes. Works offline in the truck.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-checks" aria-hidden="true"></i>
+        <h3>One-tap approval</h3>
+        <p>Review the week's queue in 5 minutes. Approve all or edit any.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-receipt" aria-hidden="true"></i>
+        <h3>QuickBooks items</h3>
+        <p>Add line items from your real QBO catalog. No duplicate data.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-credit-card" aria-hidden="true"></i>
+        <h3>Apple Pay + ACH</h3>
+        <p>Customers pay in seconds. ACH option saves you on processing fees.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-bell" aria-hidden="true"></i>
+        <h3>Smart reminders</h3>
+        <p>Polite follow-ups go out automatically. Stops the moment they pay.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonial-section">
+  <div class="container">
+    <div class="testimonial">
+      <blockquote>Sunday night is when service businesses do their invoicing — three hours of squinting at a calendar, trying to remember which jobs got extras. We built ServiceBill so the week bills itself and Sunday goes back to being Sunday.</blockquote>
+      <div class="testimonial-attr">
+        <div class="avatar">SB</div>
+        <div>
+          <div class="testimonial-name">Now onboarding our first 25 companies</div>
+          <div class="testimonial-role">Early access · free for 90 days · founder support</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">How ServiceBill compares.</h2>
+    <p class="section-lead">We picked the comparisons honestly. Here's where ServiceBill fits.</p>
+    <div class="compare">
+      <h3>Why service businesses choose ServiceBill</h3>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Spreadsheet + QBO</th>
+            <th>Jobber / Housecall</th>
+            <th class="us">ServiceBill</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label">Calendar drives invoices</td>
+            <td><i class="ti ti-x" aria-hidden="true"></i></td>
+            <td><i class="ti ti-x" aria-hidden="true"></i></td>
+            <td><i class="ti ti-check" aria-hidden="true"></i></td>
+          </tr>
+          <tr>
+            <td class="label">Setup time</td>
+            <td>n/a</td>
+            <td>2-4 weeks</td>
+            <td class="highlight">15 minutes</td>
+          </tr>
+          <tr>
+            <td class="label">Uses your real QBO items</td>
+            <td><i class="ti ti-minus" aria-hidden="true"></i></td>
+            <td><i class="ti ti-x" aria-hidden="true"></i></td>
+            <td><i class="ti ti-check" aria-hidden="true"></i></td>
+          </tr>
+          <tr>
+            <td class="label">Crew mobile app</td>
+            <td><i class="ti ti-x" aria-hidden="true"></i></td>
+            <td><i class="ti ti-check" aria-hidden="true"></i></td>
+            <td><i class="ti ti-check" aria-hidden="true"></i></td>
+          </tr>
+          <tr>
+            <td class="label">Starting price</td>
+            <td>$0 + your weekends</td>
+            <td>$79-249/mo</td>
+            <td class="highlight">$39/mo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <h2 class="section-title">Honest pricing.</h2>
+    <p class="section-lead">Pick by crew count. Switch anytime. No per-invoice fees, no per-customer fees, no surprises.</p>
+    <div class="pricing">
+      <div class="price-card">
+        <div class="price-tier">Solo</div>
+        <p class="price-amt">$39<span>/mo</span></p>
+        <p class="price-desc">For one-truck operators</p>
+        <div class="price-features">
+          <div><i class="ti ti-check" aria-hidden="true"></i> Unlimited invoices</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> QuickBooks sync</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> 1 crew app</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Stripe + ACH payments</div>
+        </div>
+        <a href="mailto:hello@servicebill.ai?subject=ServiceBill%20early%20access&body=Company%20name%2C%20industry%2C%20and%20how%20many%20crews%3A" class="btn btn-secondary price-cta">Get early access</a>
+      </div>
+
+      <div class="price-card featured">
+        <div class="price-badge">Most popular</div>
+        <div class="price-tier">Crew</div>
+        <p class="price-amt">$89<span>/mo</span></p>
+        <p class="price-desc">For 2-5 crews</p>
+        <div class="price-features">
+          <div><i class="ti ti-check" aria-hidden="true"></i> Everything in Solo</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Up to 5 crew apps</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Routes &amp; assignments</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Customer photos on invoices</div>
+        </div>
+        <a href="mailto:hello@servicebill.ai?subject=ServiceBill%20early%20access&body=Company%20name%2C%20industry%2C%20and%20how%20many%20crews%3A" class="btn btn-primary price-cta">Get early access</a>
+      </div>
+
+      <div class="price-card">
+        <div class="price-tier">Business</div>
+        <p class="price-amt">$199<span>/mo</span></p>
+        <p class="price-desc">For 6+ crews</p>
+        <div class="price-features">
+          <div><i class="ti ti-check" aria-hidden="true"></i> Everything in Crew</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Unlimited crews</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Approval workflows</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Priority support</div>
+        </div>
+        <a href="mailto:hello@servicebill.ai?subject=ServiceBill%20early%20access&body=Company%20name%2C%20industry%2C%20and%20how%20many%20crews%3A" class="btn btn-secondary price-cta">Get early access</a>
+      </div>
+    </div>
+    <p class="pricing-note">14-day free trial · No credit card required · Cancel anytime</p>
+  </div>
+</section>
+
+<section id="bookkeepers" style="padding-top: 0;">
+  <div class="container">
+    <div class="bookkeeper">
+      <div class="bookkeeper-icon">
+        <i class="ti ti-calculator" aria-hidden="true"></i>
+      </div>
+      <div>
+        <h3>Are you a bookkeeper?</h3>
+        <p>Refer your service-business clients and earn 20% recurring revenue share. They get cleaner books, you get a kickback every month they stay.</p>
+      </div>
+      <a href="#" class="btn btn-secondary">Partner program →</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top: 0; padding-bottom: 0;">
+  <div class="container">
+    <div class="final-cta">
+      <h2>Take your Sunday back.</h2>
+      <p>14 days free. Connect QuickBooks in two minutes.</p>
+      <a href="#" class="btn btn-white btn-lg">Start your trial</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="#how">How it works</a>
+      <a href="#industries">Industries</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#bookkeepers">Bookkeepers</a>
+      <a href="#">Help</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+    <p class="footer-tag">servicebill.ai · invoicing that runs on your calendar<br><span style="font-size:13px;"><a href="privacy.html" style="color:inherit;">Privacy policy</a> · <a href="terms.html" style="color:inherit;">Terms of service</a> · <a href="mailto:hello@servicebill.ai" style="color:inherit;">hello@servicebill.ai</a></span></p>
+  </div>
+</footer>
+
+</body>
+</html>
