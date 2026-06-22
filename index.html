@@ -1,468 +1,808 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ServiceBill — Your calendar already bills your clients</title>
-<meta name="description" content="ServiceBill reads the calendar you already keep, sends jobs to your crew's phones, and drafts the QuickBooks invoice the moment the work is done. Free during beta.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ServiceBill | Your calendar bills your clients</title>
+<meta name="description" content="Invoicing for service businesses. Calendar-driven, QuickBooks-native. Lawn care, cleaning, pool service, pest control, pet care, trainers. Stop spending Sundays making invoices." />
+<meta property="og:title" content="ServiceBill | Your calendar bills your clients" />
+<meta property="og:description" content="Invoicing for service businesses that show up, do the work, and want to get paid without spending Sunday night making invoices." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://servicebill.ai" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232CA01C'/%3E%3Ctext x='16' y='22' font-family='-apple-system,BlinkMacSystemFont,system-ui,sans-serif' font-size='17' font-weight='600' fill='white' text-anchor='middle'%3Eb%3C/text%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://rsms.me/" />
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.30.0/dist/tabler-icons.min.css" />
+
 <style>
-:root{
-  --paper:#FBFAF7; --ink:#17241B; --muted:#5C6B60;
-  --field:#2CA01C; --field-dark:#166534; --field-pale:#EAF7E6;
-  --line:#E4E2DA; --amber:#B45309; --amber-pale:#FFF7EC;
-  --radius:14px;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
-body{font-family:'Instrument Sans',system-ui,sans-serif;background:var(--paper);color:var(--ink);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
-h1,h2,h3{font-family:'Sora',sans-serif;letter-spacing:-0.02em;line-height:1.12}
-.mono{font-family:'IBM Plex Mono',monospace;font-weight:600}
-a{color:var(--field-dark)}
-:focus-visible{outline:3px solid var(--field);outline-offset:2px;border-radius:4px}
-.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--field-dark)}
-.btn{display:inline-block;font-family:'Sora',sans-serif;font-weight:700;font-size:16px;text-decoration:none;border-radius:11px;padding:14px 26px;transition:transform .12s ease}
-.btn:hover{transform:translateY(-1px)}
-.btn-green{background:var(--field);color:#fff;box-shadow:0 2px 0 var(--field-dark)}
-.btn-ghost{color:var(--field-dark);padding:14px 18px}
-.note{font-size:13.5px;color:var(--muted)}
-section{padding:84px 0;border-top:1px solid var(--line)}
-.section-head{max-width:640px;margin-bottom:44px}
-.section-head h2{font-size:34px;margin:10px 0 12px}
-.section-head p{color:var(--muted)}
+  :root {
+    --green: #2CA01C;
+    --green-dark: #166534;
+    --green-soft: #DCFCE7;
+    --green-soft-2: #F0FDF4;
+    --green-border: #86EFAC;
+    --ink: #0F172A;
+    --ink-2: #334155;
+    --muted: #64748B;
+    --muted-2: #94A3B8;
+    --hairline: #E2E8F0;
+    --hairline-2: #F1F5F9;
+    --bg: #FFFFFF;
+    --bg-2: #F8FAFC;
+    --amber: #B45309;
+    --amber-soft: #FEF3C7;
+    --amber-text: #78350F;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    --container: 1120px;
+    --container-narrow: 880px;
+  }
 
-/* header */
-header{position:sticky;top:0;background:rgba(251,250,247,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:50}
-.nav{display:flex;align-items:center;gap:26px;height:64px}
-.logo{font-family:'Sora',sans-serif;font-weight:800;font-size:19px;color:var(--ink);text-decoration:none}
-.logo .dot{color:var(--field)}
-.nav-links{display:flex;gap:22px;margin-left:auto;align-items:center}
-.nav-links a{font-size:14.5px;text-decoration:none;color:var(--ink);font-weight:500}
-.nav-links .btn{padding:9px 16px;font-size:14px}
-@media(max-width:760px){.nav-links a:not(.btn){display:none}}
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    color: var(--ink);
+    background: var(--bg);
+    margin: 0;
+    padding: 0;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+  }
 
-/* hero */
-.hero{padding:76px 0 88px;border-top:0}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-@media(max-width:880px){.hero-grid{grid-template-columns:1fr;gap:44px}}
-.hero h1{font-size:clamp(38px,5.4vw,58px);margin:14px 0 18px}
-.hero h1 .accent{color:var(--field)}
-.hero p.lead{font-size:19px;color:var(--muted);max-width:480px;margin-bottom:28px}
-.cta-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+  .container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+  .container-narrow { max-width: var(--container-narrow); margin: 0 auto; padding: 0 24px; }
 
-/* signature: event → invoice transformation */
-.proof{position:relative;display:flex;flex-direction:column;gap:0;max-width:430px;margin-left:auto}
-@media(max-width:880px){.proof{margin:0 auto}}
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 10px 30px rgba(23,36,27,.07)}
-.evt{padding:18px 20px}
-.evt .src{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px}
-.evt .src .mono{font-weight:500;font-size:11.5px}
-.evt-title{font-family:'Sora',sans-serif;font-weight:700;font-size:17px}
-.evt-meta{font-size:13.5px;color:var(--muted);margin-top:4px}
-.sync{display:flex;align-items:center;gap:10px;padding:14px 6px 14px 28px}
-.sync .rail{width:2px;height:34px;background:repeating-linear-gradient(var(--field) 0 5px,transparent 5px 10px)}
-.sync .what{font-size:12.5px;color:var(--field-dark)}
-.sync .what .mono{font-size:11.5px}
-.inv{padding:0;overflow:hidden;animation:rise .7s ease .5s both}
-@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.inv-head{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--field-pale);border-bottom:1px solid var(--line);font-size:12.5px}
-.inv-head .badge{background:var(--field);color:#fff;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:600}
-.inv-body{padding:16px 20px 18px;position:relative}
-.inv-line{display:flex;justify-content:space-between;gap:12px;font-size:14.5px;padding:9px 0;border-bottom:1px dashed var(--line)}
-.inv-line:last-of-type{border-bottom:0}
-.inv-line .qty{color:var(--muted)}
-.inv-total{display:flex;justify-content:space-between;margin-top:10px;padding-top:12px;border-top:2px solid var(--ink);font-weight:700;font-size:16px}
-.inv-pay{display:block;text-align:center;background:var(--field);color:#fff;text-decoration:none;font-weight:700;font-size:14px;border-radius:9px;padding:11px;margin-top:14px;pointer-events:none}
-.perf{height:14px;background:radial-gradient(circle at 7px 0,transparent 6px,#fff 6.5px) repeat-x;background-size:14px 14px;border-top:1px solid var(--line)}
+  /* nav */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px; max-width: var(--container); margin: 0 auto;
+  }
+  .logo { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
+  .logo-mark {
+    width: 30px; height: 30px; border-radius: 7px; background: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 14px; letter-spacing: -0.5px;
+  }
+  .logo-text { font-weight: 600; font-size: 17px; letter-spacing: -0.3px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-links a {
+    color: var(--ink-2); text-decoration: none; font-size: 14px; font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--green); }
+  .nav-cta { display: flex; gap: 8px; align-items: center; }
+  @media (max-width: 760px) { .nav-links { display: none; } }
 
-/* pain strip */
-.pain{background:var(--amber-pale);border-top:1px solid #F3E3CB;border-bottom:1px solid #F3E3CB;padding:30px 0}
-.pain p{max-width:760px;color:#7C4A0B;font-size:16.5px}
-.pain b{color:var(--amber)}
+  /* buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 18px; border-radius: var(--radius); font-size: 14px; font-weight: 500;
+    text-decoration: none; cursor: pointer; transition: all 0.15s; border: 1px solid transparent;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--green); color: white;
+  }
+  .btn-primary:hover { background: #259018; transform: translateY(-1px); box-shadow: var(--shadow); }
+  .btn-secondary {
+    background: white; color: var(--ink); border: 1px solid var(--hairline);
+  }
+  .btn-secondary:hover { border-color: var(--ink-2); }
+  .btn-lg { padding: 13px 24px; font-size: 15px; }
+  .btn-white {
+    background: white; color: var(--green-dark); font-weight: 600;
+  }
+  .btn-white:hover { transform: translateY(-1px); }
 
-/* loop steps */
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-@media(max-width:940px){.steps{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.steps{grid-template-columns:1fr}}
-.step{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 20px}
-.step .n{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--field-dark);letter-spacing:.1em}
-.step h3{font-size:17.5px;margin:10px 0 8px}
-.step p{font-size:14.5px;color:var(--muted)}
-.step .mono{font-size:13px;color:var(--ink)}
+  /* hero */
+  .hero { padding: 80px 0 56px; text-align: center; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 14px; background: var(--green-soft); color: var(--green-dark);
+    border-radius: 999px; font-size: 13px; font-weight: 500; margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 64px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.02;
+    margin: 0 0 22px;
+    max-width: 760px;
+    margin-left: auto; margin-right: auto;
+    color: var(--ink);
+  }
+  .hero h1 .accent { color: var(--green); }
+  .hero p.lead {
+    font-size: clamp(17px, 2vw, 19px); color: var(--ink-2);
+    line-height: 1.5; max-width: 560px; margin: 0 auto 36px;
+  }
+  .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero-note { font-size: 13px; color: var(--muted); margin-top: 18px; }
 
-/* split features */
-.split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
-@media(max-width:820px){.split{grid-template-columns:1fr}}
-.feat-list{list-style:none;display:grid;gap:16px}
-.feat-list li{padding-left:28px;position:relative;font-size:15.5px}
-.feat-list li::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border-radius:4px;background:var(--field-pale);border:2px solid var(--field)}
-.feat-list b{font-weight:600}
-.mini-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:0 8px 24px rgba(23,36,27,.06)}
-.chip-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
-.chip{font-size:12.5px;font-weight:600;border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:#fff;color:var(--muted)}
-.chip.on{background:var(--field-pale);border-color:var(--field);color:var(--field-dark)}
-.row-job{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px dashed var(--line);font-size:14px}
-.row-job:last-child{border-bottom:0}
-.row-job .t{color:var(--muted)}
-.ask{font-size:12px;font-weight:600;color:var(--field-dark);border:1.5px solid var(--field);border-radius:8px;padding:5px 10px;white-space:nowrap}
-.approve-note{margin-top:12px;background:var(--amber-pale);border:1px solid #F3E3CB;border-radius:9px;padding:9px 12px;font-size:12.5px;color:#7C4A0B}
+  /* flow diagram */
+  .flow-section { padding: 32px 0 88px; }
+  .flow {
+    background: var(--bg-2); border-radius: var(--radius-xl); padding: 28px;
+    max-width: 920px; margin: 0 auto;
+    border: 1px solid var(--hairline);
+  }
+  .flow-grid {
+    display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr;
+    gap: 0; align-items: stretch;
+  }
+  .flow-card {
+    background: white; border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg); padding: 18px;
+  }
+  .flow-card.success { border-color: var(--green-border); }
+  .flow-eyebrow {
+    font-size: 11px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.6px; margin-bottom: 10px; font-weight: 600;
+  }
+  .flow-card.success .flow-eyebrow { color: var(--green-dark); }
+  .flow-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .flow-sub { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .flow-status { font-size: 12px; display: flex; align-items: center; gap: 5px; font-weight: 500; }
+  .flow-status.done { color: var(--green-dark); }
+  .flow-status.pending { color: #1E40AF; }
+  .flow-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted-2);
+  }
+  .flow-arrow i { font-size: 22px; }
+  .flow-caption {
+    text-align: center; font-size: 13px; color: var(--muted);
+    margin: 22px 0 0;
+  }
+  @media (max-width: 760px) {
+    .flow-grid { grid-template-columns: 1fr; gap: 14px; }
+    .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+  }
 
-/* industries */
-.industries{display:flex;gap:9px;flex-wrap:wrap}
-.industries .chip{font-size:14px;padding:8px 16px;color:var(--ink)}
+  /* sections */
+  section { padding: 88px 0; }
+  .eyebrow {
+    font-size: 12px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.6px; text-align: center; margin: 0 0 18px; font-weight: 600;
+  }
+  h2.section-title {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700; letter-spacing: -1.2px; line-height: 1.1;
+    text-align: center; margin: 0 0 14px;
+  }
+  p.section-lead {
+    font-size: 17px; color: var(--ink-2); text-align: center;
+    max-width: 520px; margin: 0 auto 56px; line-height: 1.5;
+  }
 
-/* compare */
-table.cmp{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;font-size:14.5px}
-.cmp th,.cmp td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line)}
-.cmp th{font-family:'Sora',sans-serif;font-size:13.5px;background:var(--paper)}
-.cmp td:nth-child(2){background:var(--field-pale)}
-.cmp tr:last-child td{border-bottom:0}
-@media(max-width:680px){.cmp{font-size:12.5px}.cmp th,.cmp td{padding:9px 8px}}
+  /* industry tiles */
+  .industries {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;
+    max-width: 720px; margin: 0 auto;
+  }
+  .industry {
+    background: var(--bg-2); border-radius: var(--radius); padding: 22px 12px;
+    text-align: center; transition: all 0.15s; cursor: default;
+    border: 1px solid transparent;
+  }
+  .industry:hover { background: var(--green-soft-2); border-color: var(--green-border); }
+  .industry i { font-size: 26px; color: var(--ink-2); display: block; margin-bottom: 8px; }
+  .industry:hover i { color: var(--green); }
+  .industry span { font-size: 13px; font-weight: 500; color: var(--ink-2); }
+  @media (max-width: 760px) {
+    .industries { grid-template-columns: repeat(3, 1fr); }
+  }
 
-/* pricing */
-.beta-band{background:var(--field-pale);border:1px solid var(--field);border-radius:var(--radius);padding:14px 20px;margin-bottom:30px;font-size:15px}
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-@media(max-width:880px){.plans{grid-template-columns:1fr;max-width:420px}}
-.plan{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 24px;display:flex;flex-direction:column}
-.plan.hot{border:2px solid var(--field);position:relative}
-.plan.hot .tag{position:absolute;top:-12px;left:22px;background:var(--field);color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:3px 12px;letter-spacing:.06em}
-.plan h3{font-size:19px}
-.plan .who{font-size:13.5px;color:var(--muted);margin:3px 0 14px}
-.plan .price{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600}
-.plan .price span{font-size:14px;color:var(--muted);font-family:'Instrument Sans',sans-serif;font-weight:400}
-.plan ul{list-style:none;margin:16px 0 22px;display:grid;gap:9px;font-size:14px}
-.plan li{padding-left:22px;position:relative}
-.plan li::before{content:"✓";position:absolute;left:0;color:var(--field);font-weight:700}
-.plan li.soon::before{content:"◷";color:var(--muted)}
-.plan li.soon{color:var(--muted)}
-.plan .btn{margin-top:auto;text-align:center}
+  /* 3 steps */
+  .steps {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+  }
+  .step {
+    background: white; border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg); padding: 28px;
+    transition: all 0.2s;
+  }
+  .step:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); border-color: var(--green-border); }
+  .step-num {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--bg-2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 600; margin-bottom: 18px; color: var(--ink);
+  }
+  .step h3 { font-size: 19px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.3px; }
+  .step p { font-size: 14px; color: var(--ink-2); margin: 0; line-height: 1.6; }
+  @media (max-width: 760px) {
+    .steps { grid-template-columns: 1fr; }
+  }
 
-/* faq */
-.faq{max-width:720px}
-.faq details{border-bottom:1px solid var(--line);padding:16px 0}
-.faq summary{font-family:'Sora',sans-serif;font-weight:600;font-size:16.5px;cursor:pointer;list-style:none;display:flex;justify-content:space-between}
-.faq summary::after{content:"+";color:var(--field);font-size:20px}
-.faq details[open] summary::after{content:"–"}
-.faq p{margin-top:10px;color:var(--muted);font-size:15px}
+  /* qbo section */
+  .qbo-block {
+    background: var(--green-soft-2);
+    border-radius: var(--radius-xl);
+    padding: 44px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    border: 1px solid var(--green-border);
+  }
+  .qbo-eyebrow {
+    font-size: 12px; color: var(--green-dark); text-transform: uppercase;
+    letter-spacing: 0.6px; font-weight: 600; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .qbo-block h3 {
+    font-size: 26px; font-weight: 700; letter-spacing: -0.7px;
+    margin: 0 0 14px; color: var(--green-dark); line-height: 1.2;
+  }
+  .qbo-block p { font-size: 15px; color: var(--green-dark); margin: 0 0 18px; line-height: 1.6; }
+  .qbo-link { color: var(--green-dark); font-weight: 600; font-size: 14px; text-decoration: none; }
+  .qbo-link:hover { text-decoration: underline; }
+  .qbo-sample {
+    background: white; border-radius: var(--radius-lg);
+    padding: 20px; border: 1px solid var(--green-border);
+  }
+  .qbo-sample-eyebrow { font-size: 12px; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
+  .qbo-row {
+    display: flex; justify-content: space-between;
+    padding: 9px 0; font-size: 14px;
+    border-top: 1px solid var(--hairline-2);
+  }
+  .qbo-row:first-of-type { border-top: none; }
+  .qbo-row .acct { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .qbo-row .amt { font-weight: 500; }
+  .qbo-synced {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0 0; border-top: 1px solid var(--hairline);
+    margin-top: 8px; font-size: 14px; font-weight: 600;
+  }
+  .qbo-synced i { font-size: 18px; color: var(--green); }
+  @media (max-width: 760px) {
+    .qbo-block { grid-template-columns: 1fr; padding: 28px; gap: 28px; }
+  }
 
-/* security */
-.sec-row{display:flex;gap:30px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
-.sec-row div{max-width:230px}
-.sec-row b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:3px}
+  /* features grid */
+  .features {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .feature {
+    background: white; border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg); padding: 22px;
+  }
+  .feature i {
+    font-size: 22px; color: var(--green); margin-bottom: 12px; display: block;
+  }
+  .feature h3 {
+    font-size: 15px; font-weight: 600; margin: 0 0 6px;
+  }
+  .feature p { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.55; }
+  @media (max-width: 760px) {
+    .features { grid-template-columns: 1fr; }
+  }
 
-/* final + footer */
-.final{text-align:center;padding:96px 0}
-.final h2{font-size:clamp(30px,4.5vw,44px);margin-bottom:14px}
-.final p{color:var(--muted);margin-bottom:26px}
-footer{border-top:1px solid var(--line);padding:30px 0;font-size:13.5px;color:var(--muted)}
-.foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.foot a{color:var(--muted);text-decoration:none;margin-left:18px}
+  /* testimonial */
+  .testimonial-section { background: var(--bg-2); }
+  .testimonial {
+    max-width: 720px; margin: 0 auto;
+    text-align: center;
+  }
+  .testimonial blockquote {
+    font-family: 'Inter', serif;
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 400; letter-spacing: -0.6px; line-height: 1.35;
+    color: var(--ink); margin: 0 0 28px; quotes: """ """;
+  }
+  .testimonial blockquote::before { content: open-quote; }
+  .testimonial blockquote::after { content: close-quote; }
+  .testimonial-attr {
+    display: flex; align-items: center; gap: 14px; justify-content: center;
+  }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--green-soft); color: var(--green-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 14px;
+  }
+  .testimonial-name { font-size: 15px; font-weight: 600; text-align: left; }
+  .testimonial-role { font-size: 13px; color: var(--muted); text-align: left; }
+
+  /* comparison */
+  .compare {
+    max-width: 920px; margin: 0 auto;
+    background: white; border: 1px solid var(--hairline);
+    border-radius: var(--radius-xl); padding: 36px; overflow-x: auto;
+  }
+  .compare h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 24px; }
+  .compare table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 600px; }
+  .compare th {
+    text-align: left; padding: 14px 12px; font-weight: 600;
+    color: var(--muted); font-size: 13px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .compare th.us { color: var(--green); }
+  .compare td {
+    padding: 14px 12px; border-bottom: 1px solid var(--hairline-2);
+    color: var(--ink-2);
+  }
+  .compare tr:last-child td { border-bottom: none; }
+  .compare td.label { color: var(--muted); width: 38%; }
+  .compare td.highlight { color: var(--green); font-weight: 600; }
+  .compare i.ti-check { color: var(--green); font-size: 20px; }
+  .compare i.ti-x { color: var(--muted-2); font-size: 20px; }
+  .compare i.ti-minus { color: var(--muted-2); font-size: 20px; }
+
+  /* pricing */
+  .pricing {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    max-width: 880px; margin: 0 auto;
+  }
+  .price-card {
+    background: white; border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg); padding: 28px;
+    position: relative; transition: all 0.2s;
+  }
+  .price-card:hover { box-shadow: var(--shadow-lg); }
+  .price-card.featured { border: 2px solid var(--green); padding: 27px; }
+  .price-badge {
+    position: absolute; top: -11px; left: 28px;
+    background: var(--green); color: white; font-size: 11px;
+    padding: 4px 11px; border-radius: 999px; font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  .price-tier { font-size: 14px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+  .price-amt {
+    font-size: 38px; font-weight: 700; margin: 0; letter-spacing: -1.5px;
+  }
+  .price-amt span { font-size: 15px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+  .price-desc { font-size: 13px; color: var(--muted); margin: 4px 0 18px; }
+  .price-features { font-size: 13px; color: var(--ink-2); line-height: 1.9; margin-bottom: 20px; }
+  .price-features div { display: flex; align-items: flex-start; gap: 8px; }
+  .price-features i { color: var(--green); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .price-cta { width: 100%; }
+  .pricing-note { text-align: center; font-size: 13px; color: var(--muted); margin-top: 20px; }
+  @media (max-width: 760px) {
+    .pricing { grid-template-columns: 1fr; }
+  }
+
+  /* bookkeeper */
+  .bookkeeper {
+    background: var(--bg-2); border-radius: var(--radius-xl);
+    padding: 36px;
+    display: grid; grid-template-columns: 80px 1fr auto;
+    gap: 24px; align-items: center;
+    border: 1px solid var(--hairline);
+  }
+  .bookkeeper-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: white; display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--hairline);
+  }
+  .bookkeeper-icon i { font-size: 32px; color: var(--ink-2); }
+  .bookkeeper h3 { font-size: 20px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.4px; }
+  .bookkeeper p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.55; }
+  @media (max-width: 760px) {
+    .bookkeeper { grid-template-columns: 1fr; text-align: center; }
+    .bookkeeper-icon { margin: 0 auto; }
+  }
+
+  /* final cta */
+  .final-cta {
+    background: var(--green);
+    border-radius: var(--radius-xl);
+    padding: 64px 32px;
+    text-align: center; color: white;
+  }
+  .final-cta h2 {
+    font-size: clamp(28px, 4vw, 38px); font-weight: 700; letter-spacing: -1px;
+    margin: 0 0 12px; color: white; line-height: 1.15;
+  }
+  .final-cta p { font-size: 16px; opacity: 0.92; margin: 0 0 28px; }
+
+  /* footer */
+  footer { padding: 56px 0 32px; border-top: 1px solid var(--hairline); margin-top: 88px; }
+  .footer-links {
+    display: flex; justify-content: center; gap: 28px;
+    margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--ink-2); text-decoration: none; font-size: 14px;
+  }
+  .footer-links a:hover { color: var(--green); }
+  .footer-tag { text-align: center; font-size: 13px; color: var(--muted); }
+
+  @media (max-width: 760px) {
+    section { padding: 64px 0; }
+    .hero { padding: 56px 0 32px; }
+    .qbo-block, .bookkeeper, .compare { padding: 24px; }
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap nav">
-    <a class="logo" href="/">ServiceBill<span class="dot">.</span></a>
-    <nav class="nav-links">
-      <a href="#loop">How it works</a>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <div class="logo-mark">sb</div>
+      <div class="logo-text">servicebill<span style="color:var(--green);">.ai</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#industries">For your industry</a>
       <a href="#pricing">Pricing</a>
-      <a href="#bookkeepers">For bookkeepers</a>
-      <a href="https://app.servicebill.ai/login.html">Sign in</a>
-      <a class="btn btn-green" href="https://app.servicebill.ai/login.html#new">Start free</a>
-    </nav>
+      <a href="#bookkeepers">Bookkeepers</a>
+    </div>
+    <div class="nav-cta">
+      
+      <a href="mailto:info@servicebill.ai?subject=ServiceBill%20early%20access&body=Company%20name%2C%20industry%2C%20and%20how%20many%20crews%3A" class="btn btn-primary">Get early access</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="badge">
+      <i class="ti ti-link" aria-hidden="true"></i>
+      Works with QuickBooks Online
+    </div>
+    <h1>Your calendar<br/><span class="accent">bills your clients.</span></h1>
+    <p class="lead">For service businesses that show up, do the work, and want to get paid without spending Sunday night making invoices.</p>
+    <div class="hero-cta">
+      <a href="#pricing" class="btn btn-primary btn-lg">Get early access</a>
+      <a href="#how" class="btn btn-secondary btn-lg">
+        <i class="ti ti-arrow-down" aria-hidden="true"></i>
+        See how it works
+      </a>
+    </div>
+    <p class="hero-note">No credit card needed. Connects to QuickBooks in about two minutes.</p>
   </div>
 </header>
 
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <span class="eyebrow">Invoicing for field service crews</span>
-      <h1>Your calendar already <span class="accent">bills your clients.</span></h1>
-      <p class="lead">ServiceBill reads the calendar you already keep, puts each job on your crew's phones, and drafts the QuickBooks invoice the moment the work is done. Quantities included.</p>
-      <div class="cta-row">
-        <a class="btn btn-green" href="https://app.servicebill.ai/login.html#new">Create your company — free during beta</a>
-        <a class="btn btn-ghost" href="#loop">See how it works ↓</a>
-      </div>
-      <p class="note">No card. Connects to QuickBooks Online in about two minutes.</p>
-    </div>
-
-    <div class="proof" aria-label="Example: a calendar event becomes a QuickBooks invoice">
-      <div class="card evt">
-        <div class="src"><span>YOUR CALENDAR</span><span class="mono">TUE · 8:00 AM</span></div>
-        <div class="evt-title">Spread pine straw 15 bales — Cole Estate</div>
-        <div class="evt-meta">Marc's route · from Outlook</div>
-      </div>
-      <div class="sync">
-        <div class="rail" aria-hidden="true"></div>
-        <div class="what">Matched by ServiceBill <span class="mono">· customer · service · quantity · crew</span></div>
-      </div>
-      <div class="card inv">
-        <div class="inv-head"><span><b>Invoice #1042</b> · Cole Estate</span><span class="badge">In QuickBooks</span></div>
-        <div class="inv-body">
-          <div class="inv-line"><span>Pine straw — per bale <span class="qty">× <span class="mono">15</span></span></span><span class="mono">$172.50</span></div>
-          <div class="inv-line"><span>Edging &amp; blowing</span><span class="mono">$25.00</span></div>
-          <div class="inv-total"><span>Total</span><span class="mono">$197.50</span></div>
-          <span class="inv-pay">Pay invoice — card · ACH · Apple Pay</span>
+<section class="flow-section" style="padding-top: 0;">
+  <div class="container">
+    <div class="flow">
+      <div class="flow-grid">
+        <div class="flow-card">
+          <div class="flow-eyebrow">Tuesday</div>
+          <div class="flow-title">Anderson estate</div>
+          <div class="flow-sub">2:30pm · Weekly mow</div>
+          <div class="flow-status done">
+            <i class="ti ti-circle-check" aria-hidden="true"></i>
+            Crew added 4 bales of pine straw
+          </div>
         </div>
-        <div class="perf" aria-hidden="true"></div>
+        <div class="flow-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        <div class="flow-card">
+          <div class="flow-eyebrow">Auto-drafted</div>
+          <div class="flow-title">Invoice #1042</div>
+          <div class="flow-sub">3 line items · $190.13</div>
+          <div class="flow-status pending">
+            <i class="ti ti-eye" aria-hidden="true"></i>
+            Waiting for your approval
+          </div>
+        </div>
+        <div class="flow-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        <div class="flow-card success">
+          <div class="flow-eyebrow">Wednesday</div>
+          <div class="flow-title">$190.13 paid</div>
+          <div class="flow-sub">Anderson · Apple Pay</div>
+          <div class="flow-status done">
+            <i class="ti ti-check" aria-hidden="true"></i>
+            Synced to QuickBooks
+          </div>
+        </div>
+      </div>
+      <p class="flow-caption">From job to bank account, with one approval tap from you.</p>
+    </div>
+  </div>
+</section>
+
+<section id="industries" style="padding-top: 32px;">
+  <div class="container">
+    <p class="eyebrow">Built for businesses that bill by the visit</p>
+    <div class="industries">
+      <div class="industry">
+        <i class="ti ti-mower" aria-hidden="true"></i>
+        <span>Lawn care</span>
+      </div>
+      <div class="industry">
+        <i class="ti ti-spray" aria-hidden="true"></i>
+        <span>Cleaning</span>
+      </div>
+      <div class="industry">
+        <i class="ti ti-paw" aria-hidden="true"></i>
+        <span>Pet services</span>
+      </div>
+      <div class="industry">
+        <i class="ti ti-pool" aria-hidden="true"></i>
+        <span>Pool service</span>
+      </div>
+      <div class="industry">
+        <i class="ti ti-bug" aria-hidden="true"></i>
+        <span>Pest control</span>
+      </div>
+      <div class="industry">
+        <i class="ti ti-barbell" aria-hidden="true"></i>
+        <span>Trainers</span>
       </div>
     </div>
   </div>
 </section>
 
-<div class="pain">
-  <div class="wrap">
-    <p><b>The Sunday-night problem:</b> the work got done all week. The invoices didn't. Somewhere between the truck, the group text, and the sticky note on the dash, <b>billable work goes unbilled</b> — and the rest gets invoiced days late, from memory.</p>
-  </div>
-</div>
-
-<section id="loop">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">The loop</span>
-      <h2>Four steps. None of them are "type up invoices."</h2>
-      <p>It's a sequence because your week is a sequence: schedule it, do it, bill it, get paid.</p>
-    </div>
+<section id="how">
+  <div class="container">
+    <h2 class="section-title">Three steps. That's the whole product.</h2>
+    <p class="section-lead">No new system to learn. No data to migrate. ServiceBill sits between your calendar and your books.</p>
     <div class="steps">
       <div class="step">
-        <span class="n">01 — SCHEDULE</span>
-        <h3>Connect the calendar you already use</h3>
-        <p>Google, Outlook, or Apple — paste one secret calendar address. ServiceBill syncs every 15 minutes and matches events to your QuickBooks customers. Anything it isn't sure about waits for a one-tap confirmation, then it remembers that match forever. Recurring visits work too: set a mow weekly or an inspection quarterly and a year of visits appears on the schedule.</p>
+        <div class="step-num">1</div>
+        <h3>The crew shows up.</h3>
+        <p>Each calendar event is a job. The crew taps "complete" on their phone and voice-notes anything extra they did. That's it for the field.</p>
       </div>
       <div class="step">
-        <span class="n">02 — WORK</span>
-        <h3>Your crew taps "done"</h3>
-        <p>Each crew member sees their route on their phone. No app store, no accounts to manage — they sign in with your company number, their name, and a PIN. When a job's finished they tap complete, talk a quick note, snap photos, add extras.</p>
+        <div class="step-num">2</div>
+        <h3>ServiceBill drafts the invoice.</h3>
+        <p>Base service auto-fills from the recurring schedule. Extras turn into QuickBooks line items with the right pricing, pulled from your own item list.</p>
       </div>
       <div class="step">
-        <span class="n">03 — BILL</span>
-        <h3>The invoice drafts itself</h3>
-        <p>ServiceBill reads the event and the crew's note. <span class="mono">"pine straw 15 bales"</span> becomes 15 × your bale price, on the right customer, from your own QuickBooks catalog. You approve a queue, not a blank page.</p>
-      </div>
-      <div class="step">
-        <span class="n">04 — GET PAID</span>
-        <h3>QuickBooks settles it</h3>
-        <p>Approved invoices push to QuickBooks Online and email to the customer with a pay link — card, ACH, or Apple Pay, processed by QuickBooks Payments. Payments reconcile in your books automatically. Your bookkeeper sees clean ledgers, not a shoebox.</p>
+        <div class="step-num">3</div>
+        <h3>You tap approve.</h3>
+        <p>Review the queue from your couch. Approve all, or edit individuals. Invoices send with payment links. Cash settles into QuickBooks automatically.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section>
-  <div class="wrap split">
-    <div>
-      <span class="eyebrow">For the crew</span>
-      <h2 style="font-size:30px;margin:10px 0 16px">Built for a phone in a work glove.</h2>
-      <ul class="feat-list">
-        <li><b>One route per person.</b> Marc sees Marc's jobs first, with everyone else's a tab away.</li>
-        <li><b>Helping out has rules.</b> Finished early? Tap <i>Ask to take this job</i> on another crew's work. The office approves with one tap, and the job moves — nothing gets reassigned behind anyone's back.</li>
-        <li><b>Voice notes become line items.</b> "Added two yards of mulch and an hour of cleanup" turns into priced lines, ready for approval.</li>
-        <li><b>Photos ride along.</b> Before-and-after shots attach to the job for disputes you'll now win.</li>
-      </ul>
-    </div>
-    <div class="mini-card" aria-label="Crew app preview">
-      <div class="chip-row"><span class="chip on">My route</span><span class="chip">Dana</span><span class="chip">Riley</span><span class="chip">Unassigned</span></div>
-      <div class="row-job"><span><b>Cole Estate</b> · Pine straw <span class="mono">×15</span></span><span class="t mono">8:00</span></div>
-      <div class="row-job"><span><b>Baker Residence</b> · Weekly mowing</span><span class="t mono">9:30</span></div>
-      <div class="row-job"><span><b>Henderson</b> · Hedge trimming</span><span class="ask">Ask to take this job</span></div>
-      <div class="approve-note">⏳ Riley asked to take <b>Henderson</b> — waiting on the office</div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap split">
-    <div class="mini-card" aria-label="Office schedule preview">
-      <div class="chip-row"><span class="chip on">14 days</span><span class="chip">Month</span><span class="chip">↻ Sync calendar</span></div>
-      <div class="row-job"><span><b>Tue 16</b> · 5 jobs</span><span class="t mono">2/5 done</span></div>
-      <div class="row-job"><span><b>Wed 17</b> · 3 jobs</span><span class="t mono">·</span></div>
-      <div class="row-job"><span><b>Jul 14</b> · Quarterly — irrigation inspection</span><span class="t">repeats</span></div>
-      <div class="approve-note" style="background:#EFF6FF;border-color:#BFDBFE;color:#1E40AF">📅 "Standing appointment" needs your eye — confirm once, it remembers the whole series</div>
-    </div>
-    <div>
-      <span class="eyebrow">For the office</span>
-      <h2 style="font-size:30px;margin:10px 0 16px">The whole year on one screen.</h2>
-      <ul class="feat-list">
-        <li><b>14-day strip and a full month view.</b> See which days are loaded, tap any day to work it, page forward to next quarter's visits.</li>
-        <li><b>Recurring visits, natively.</b> Weekly, every two weeks, monthly, quarterly — one entry schedules a year ahead and keeps extending itself.</li>
-        <li><b>Click anything to fix it.</b> Reschedule, reassign, change the quantity, or delete — every open job is one tap from editable.</li>
-        <li><b>Approve, don't type.</b> Crew requests, calendar matches, and drafted invoices all arrive as queues. Your job is yes or no.</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Who it's for</span>
-      <h2>If the job lives on a calendar, it bills here.</h2>
-    </div>
-    <div class="industries">
-      <span class="chip">Lawn &amp; landscaping</span><span class="chip">Pool service</span><span class="chip">House cleaning</span>
-      <span class="chip">Pest control</span><span class="chip">Dog walking &amp; pet care</span><span class="chip">Painting</span>
-      <span class="chip">Personal training</span><span class="chip">Pressure washing</span><span class="chip">Handyman</span>
+<section style="padding-top: 0;">
+  <div class="container">
+    <div class="qbo-block">
+      <div>
+        <div class="qbo-eyebrow">
+          <i class="ti ti-link" aria-hidden="true"></i>
+          QuickBooks Online
+        </div>
+        <h3>Your books, exactly as your accountant wants them.</h3>
+        <p>Every line item maps to your real QBO items, with the right income accounts and tax codes. No duplicate data. No Monday cleanup. Your bookkeeper will love it.</p>
+        <a href="#how" class="qbo-link">See how it works →</a>
+      </div>
+      <div class="qbo-sample">
+        <div class="qbo-sample-eyebrow">Anderson estate · Invoice #1042</div>
+        <div class="qbo-row">
+          <div>
+            Weekly mow
+            <div class="acct">→ Landscaping income</div>
+          </div>
+          <span class="amt">$120.00</span>
+        </div>
+        <div class="qbo-row">
+          <div>
+            Pine straw · 4 bales
+            <div class="acct">→ Materials (taxable)</div>
+          </div>
+          <span class="amt">$34.00</span>
+        </div>
+        <div class="qbo-row">
+          <div>
+            Leaf cleanup · 0.75 hr
+            <div class="acct">→ Service income</div>
+          </div>
+          <span class="amt">$33.75</span>
+        </div>
+        <div class="qbo-synced">
+          <span>Synced to QuickBooks</span>
+          <i class="ti ti-circle-check-filled" aria-hidden="true"></i>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <section>
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">The honest comparison</span>
-      <h2>We're not trying to replace your business software.</h2>
-      <p>Jobber and Housecall Pro are good full-suite products — if you want to move your whole operation into them. ServiceBill bets you'd rather keep your calendar and your QuickBooks.</p>
+  <div class="container">
+    <h2 class="section-title">Everything you need. Nothing you don't.</h2>
+    <p class="section-lead">We left out the clutter and kept the parts that get you paid.</p>
+    <div class="features">
+      <div class="feature">
+        <i class="ti ti-calendar-time" aria-hidden="true"></i>
+        <h3>Recurring schedules</h3>
+        <p>Weekly, bi-weekly, or monthly. Set it once and ServiceBill invoices every time.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-device-mobile" aria-hidden="true"></i>
+        <h3>Crew mobile app</h3>
+        <p>Route view, photo capture, voice notes. Works offline in the truck.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-checks" aria-hidden="true"></i>
+        <h3>One-tap approval</h3>
+        <p>Review the week's queue in 5 minutes. Approve all or edit any.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-receipt" aria-hidden="true"></i>
+        <h3>QuickBooks items</h3>
+        <p>Add line items from your real QBO catalog. No duplicate data.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-credit-card" aria-hidden="true"></i>
+        <h3>Apple Pay + ACH</h3>
+        <p>Customers pay in seconds. ACH option saves you on processing fees.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-bell" aria-hidden="true"></i>
+        <h3>Smart reminders</h3>
+        <p>Polite follow-ups go out automatically. Stops the moment they pay.</p>
+      </div>
     </div>
-    <table class="cmp">
-      <tr><th></th><th>ServiceBill</th><th>Jobber / Housecall</th><th>Spreadsheet + memory</th></tr>
-      <tr><td>Your calendar</td><td>Keep it — we read it</td><td>Replaced by theirs</td><td>It's the whole system</td></tr>
-      <tr><td>Your QuickBooks</td><td>Native — invoices live there</td><td>Synced, sometimes roughly</td><td>Manual entry, eventually</td></tr>
-      <tr><td>Invoice creation</td><td>Drafted from the job, with quantities</td><td>Forms you fill in</td><td>Sunday night</td></tr>
-      <tr><td>Crew setup</td><td>Company number + name + PIN</td><td>Per-user accounts &amp; training</td><td>Group text</td></tr>
-      <tr><td>Price</td><td class="mono">$39–199/mo</td><td class="mono">$49–349/mo + add-ons</td><td>Your weekend</td></tr>
-    </table>
   </div>
 </section>
 
-<section id="bookkeepers">
-  <div class="wrap split">
-    <div>
-      <span class="eyebrow">For bookkeepers</span>
-      <h2 style="font-size:30px;margin:10px 0 16px">Your messiest clients, suddenly clean.</h2>
-      <p style="color:var(--muted);margin-bottom:16px">You know the client: a great operator with a shoebox of receipts and invoices written from memory. ServiceBill makes their billing happen at the job site, lands every invoice in QuickBooks Online correctly categorized, and reconciles payments automatically.</p>
-      <ul class="feat-list">
-        <li><b>Partner program:</b> 20% recurring on every client you bring, for as long as they stay.</li>
-        <li><b>Any vertical:</b> lawn care, cleaners, dog walkers, painters, trainers — same loop, their catalog.</li>
-        <li><b>You stay the hero:</b> we're plumbing; the clean books have your name on them.</li>
-      </ul>
-      <p style="margin-top:18px"><a class="btn btn-green" href="mailto:info@servicebill.ai?subject=Bookkeeper%20partner%20program&body=Hi%20ServiceBill%2C%0A%0AI'm%20a%20bookkeeper%20and%20I'd%20like%20to%20hear%20about%20the%20partner%20program.%0A%0AMy%20practice%3A%20%0AClients%20in%20field%20service%3A%20%0ABest%20way%20to%20reach%20me%3A%20%0A%0AThanks!">Talk to us about partnering</a></p>
-    </div>
-    <div class="mini-card">
-      <div class="eyebrow" style="margin-bottom:12px">A client's week, in their ledger</div>
-      <div class="row-job"><span>INV-1042 · Cole Estate</span><span class="mono" style="color:var(--field-dark)">$197.50 ✓ paid</span></div>
-      <div class="row-job"><span>INV-1043 · Baker Residence</span><span class="mono" style="color:var(--field-dark)">$80.00 ✓ paid</span></div>
-      <div class="row-job"><span>INV-1044 · Henderson</span><span class="mono">$45.00 sent</span></div>
-      <div class="row-job"><span>Landscaping Services income</span><span class="mono">auto-categorized</span></div>
+<section class="testimonial-section">
+  <div class="container">
+    <div class="testimonial">
+      <blockquote>Sunday night is when most service businesses do their invoicing. Three hours of squinting at a calendar, trying to remember which jobs got extras. We built ServiceBill so the week bills itself and Sunday goes back to being Sunday.</blockquote>
+      <div class="testimonial-attr">
+        <div class="avatar">SB</div>
+        <div>
+          <div class="testimonial-name">Now in early access</div>
+          <div class="testimonial-role">Free for your first 90 days, with help from us to get set up</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <section>
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Security</span>
-      <h2>Boring, on purpose.</h2>
-    </div>
-    <div class="sec-row">
-      <div><b>Your money never touches us</b>Payments run on QuickBooks Payments, hosted by Intuit. We never see or store card numbers.</div>
-      <div><b>Your data is yours alone</b>Every company's data is isolated. Cross-company access is blocked and tested on every release.</div>
-      <div><b>Logins fight back</b>Repeated failed attempts lock the login for 15 minutes. Passwords and PINs are hashed, sessions signed, everything encrypted in transit.</div>
-      <div><b>Read-only calendar access</b>We read your published calendar feed. We can't change, delete, or add events.</div>
+  <div class="container">
+    <h2 class="section-title">How ServiceBill compares.</h2>
+    <p class="section-lead">We tried to be fair about it. Here's where ServiceBill fits.</p>
+    <div class="compare">
+      <h3>Why service businesses choose ServiceBill</h3>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Spreadsheet + QBO</th>
+            <th>Jobber / Housecall</th>
+            <th class="us">ServiceBill</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label">Calendar drives invoices</td>
+            <td><i class="ti ti-x" aria-hidden="true"></i></td>
+            <td><i class="ti ti-x" aria-hidden="true"></i></td>
+            <td><i class="ti ti-check" aria-hidden="true"></i></td>
+          </tr>
+          <tr>
+            <td class="label">Setup time</td>
+            <td>n/a</td>
+            <td>2-4 weeks</td>
+            <td class="highlight">15 minutes</td>
+          </tr>
+          <tr>
+            <td class="label">Uses your real QBO items</td>
+            <td><i class="ti ti-minus" aria-hidden="true"></i></td>
+            <td><i class="ti ti-x" aria-hidden="true"></i></td>
+            <td><i class="ti ti-check" aria-hidden="true"></i></td>
+          </tr>
+          <tr>
+            <td class="label">Crew mobile app</td>
+            <td><i class="ti ti-x" aria-hidden="true"></i></td>
+            <td><i class="ti ti-check" aria-hidden="true"></i></td>
+            <td><i class="ti ti-check" aria-hidden="true"></i></td>
+          </tr>
+          <tr>
+            <td class="label">Starting price</td>
+            <td>$0 + your weekends</td>
+            <td>$79-249/mo</td>
+            <td class="highlight">$39/mo</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
 
 <section id="pricing">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Pricing</span>
-      <h2>Priced by crew, because that's how you grow.</h2>
-      <p>Every plan has the entire loop — calendar sync, AI invoice drafting, QuickBooks, payments. We never cap your customers and never hold the core product hostage.</p>
+  <div class="container">
+    <h2 class="section-title">Honest pricing.</h2>
+    <p class="section-lead">Pick by crew count. Switch anytime. No per-invoice fees, no per-customer fees, no surprises.</p>
+    <div class="pricing">
+      <div class="price-card">
+        <div class="price-tier">Solo</div>
+        <p class="price-amt">$39<span>/mo</span></p>
+        <p class="price-desc">For one-truck operators</p>
+        <div class="price-features">
+          <div><i class="ti ti-check" aria-hidden="true"></i> Unlimited invoices</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> QuickBooks sync</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> 1 crew app</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Stripe + ACH payments</div>
+        </div>
+        <a href="mailto:info@servicebill.ai?subject=ServiceBill%20early%20access&body=Company%20name%2C%20industry%2C%20and%20how%20many%20crews%3A" class="btn btn-secondary price-cta">Get early access</a>
+      </div>
+
+      <div class="price-card featured">
+        <div class="price-badge">Most popular</div>
+        <div class="price-tier">Crew</div>
+        <p class="price-amt">$89<span>/mo</span></p>
+        <p class="price-desc">For 2-5 crews</p>
+        <div class="price-features">
+          <div><i class="ti ti-check" aria-hidden="true"></i> Everything in Solo</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Up to 5 crew apps</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Routes &amp; assignments</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Customer photos on invoices</div>
+        </div>
+        <a href="mailto:info@servicebill.ai?subject=ServiceBill%20early%20access&body=Company%20name%2C%20industry%2C%20and%20how%20many%20crews%3A" class="btn btn-primary price-cta">Get early access</a>
+      </div>
+
+      <div class="price-card">
+        <div class="price-tier">Business</div>
+        <p class="price-amt">$199<span>/mo</span></p>
+        <p class="price-desc">For 6+ crews</p>
+        <div class="price-features">
+          <div><i class="ti ti-check" aria-hidden="true"></i> Everything in Crew</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Unlimited crews</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Approval workflows</div>
+          <div><i class="ti ti-check" aria-hidden="true"></i> Priority support</div>
+        </div>
+        <a href="mailto:info@servicebill.ai?subject=ServiceBill%20early%20access&body=Company%20name%2C%20industry%2C%20and%20how%20many%20crews%3A" class="btn btn-secondary price-cta">Get early access</a>
+      </div>
     </div>
-    <div class="beta-band"><b>Free while we're in beta.</b> Founding customers use everything at no charge and help us decide what to build next. When billing starts, you'll get notice and founding pricing — no surprise charges, ever.</div>
-    <div class="plans">
-      <div class="plan">
-        <h3>Solo</h3><div class="who">Owner-operators — you are the crew</div>
-        <div class="price">$39<span>/mo</span></div>
-        <ul>
-          <li>Full loop: calendar → crew app → QuickBooks</li>
-          <li>1 login (you, wearing both hats)</li>
-          <li>Unlimited customers &amp; invoices</li>
-          <li>Recurring visits &amp; month view</li>
-        </ul>
-        <a class="btn btn-green" href="https://app.servicebill.ai/login.html#new">Start free</a>
+    <p class="pricing-note">Free for your first 90 days in early access. No credit card required. Cancel anytime.</p>
+  </div>
+</section>
+
+<section id="bookkeepers" style="padding-top: 0;">
+  <div class="container">
+    <div class="bookkeeper">
+      <div class="bookkeeper-icon">
+        <i class="ti ti-calculator" aria-hidden="true"></i>
       </div>
-      <div class="plan hot">
-        <span class="tag">MOST CREWS START HERE</span>
-        <h3>Crew</h3><div class="who">Teams of 2–5 in the field</div>
-        <div class="price">$89<span>/mo</span></div>
-        <ul>
-          <li>Everything in Solo</li>
-          <li>Up to 5 crew logins with personal routes</li>
-          <li>Job transfer requests with office approval</li>
-          <li>Voice notes &amp; photo capture</li>
-        </ul>
-        <a class="btn btn-green" href="https://app.servicebill.ai/login.html#new">Start free</a>
+      <div>
+        <h3>Are you a bookkeeper?</h3>
+        <p>Refer your service-business clients and earn 20% recurring revenue share. They get cleaner books, you get a kickback every month they stay.</p>
       </div>
-      <div class="plan">
-        <h3>Business</h3><div class="who">6+ crews, multiple trucks</div>
-        <div class="price">$199<span>/mo</span></div>
-        <ul>
-          <li>Everything in Crew</li>
-          <li>Unlimited crew logins</li>
-          <li class="soon">GPS time-on-site &amp; route map (coming)</li>
-          <li class="soon">Priority support &amp; onboarding (coming)</li>
-        </ul>
-        <a class="btn btn-green" href="https://app.servicebill.ai/login.html#new">Start free</a>
-      </div>
+      <a href="mailto:info@servicebill.ai?subject=Bookkeeper%20partner%20program&body=Tell%20us%20about%20your%20practice%20and%20how%20many%20service-business%20clients%20you%20work%20with%3A" class="btn btn-secondary">Partner program</a>
     </div>
   </div>
 </section>
 
-<section>
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Questions</span>
-      <h2>The ones everyone asks.</h2>
+<section style="padding-top: 0; padding-bottom: 0;">
+  <div class="container">
+    <div class="final-cta">
+      <h2>Take your Sunday back.</h2>
+      <p>Free for your first 90 days. Connect QuickBooks in about two minutes.</p>
+      <a href="mailto:info@servicebill.ai?subject=ServiceBill%20early%20access&body=Company%20name%2C%20industry%2C%20and%20how%20many%20crews%3A" class="btn btn-white btn-lg">Get early access</a>
     </div>
-    <div class="faq">
-      <details>
-        <summary>Which calendars work?</summary>
-        <p>Google Calendar, Outlook / Microsoft 365, and Apple iCloud — anything that publishes a standard calendar feed. You paste one secret address; we sync it every 15 minutes. Calendar providers refresh their published feeds on their own schedule, so brand-new events can take 15–60 minutes to appear. That lag is theirs, not ours.</p>
-      </details>
-      <details>
-        <summary>Do I need QuickBooks?</summary>
-        <p>Yes — QuickBooks Online, any plan. ServiceBill connects through Intuit's official API: we pull your customers and service catalog, push approved invoices, and payments reconcile automatically through QuickBooks Payments.</p>
-      </details>
-      <details>
-        <summary>What do my crew members need?</summary>
-        <p>A phone with a browser. They sign in with your company number, their first name, and a PIN you set. No app store downloads, no email accounts, nothing to install on day one of a new hire.</p>
-      </details>
-      <details>
-        <summary>What happens when the AI gets something wrong?</summary>
-        <p>Nothing goes to a customer without you. Calendar matches it isn't sure about wait in a review queue; drafted invoices wait for your approval; every quantity is editable. When you correct a match once, it remembers — recurring events stop asking entirely.</p>
-      </details>
-      <details>
-        <summary>What does ServiceBill cost during beta?</summary>
-        <p>Nothing. Founding customers use the full product free while we finish the rough edges. When paid plans start you'll get clear notice and founding-customer pricing — we will never start charging your card by surprise, because we don't have your card.</p>
-      </details>
-    </div>
-  </div>
-</section>
-
-<section class="final">
-  <div class="wrap">
-    <span class="eyebrow">Free during beta</span>
-    <h2>Take your Sunday back.</h2>
-    <p>The work already happened. The invoice should too.</p>
-    <a class="btn btn-green" href="https://app.servicebill.ai/login.html#new">Create your company — free</a>
-    <p class="note" style="margin-top:14px">Questions first? <a href="mailto:info@servicebill.ai?subject=Question%20about%20ServiceBill">info@servicebill.ai</a></p>
   </div>
 </section>
 
 <footer>
-  <div class="wrap foot">
-    <span>© 2026 ServiceBill · Made in Atlanta</span>
-    <span>
-      <a href="/privacy.html">Privacy</a>
-      <a href="/terms.html">Terms</a>
-      <a href="mailto:info@servicebill.ai">info@servicebill.ai</a>
-    </span>
+  <div class="container">
+    <div class="footer-links">
+      <a href="#how">How it works</a>
+      <a href="#industries">Industries</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#bookkeepers">Bookkeepers</a>
+      <a href="mailto:info@servicebill.ai">Help</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <p class="footer-tag">servicebill.ai · invoicing that runs on your calendar<br><span style="font-size:13px;"><a href="privacy.html" style="color:inherit;">Privacy policy</a> · <a href="terms.html" style="color:inherit;">Terms of service</a> · <a href="mailto:info@servicebill.ai" style="color:inherit;">info@servicebill.ai</a></span></p>
   </div>
 </footer>
 
